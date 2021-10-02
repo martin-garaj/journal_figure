@@ -12,7 +12,7 @@ git push -u origin main
 update PV_lib from local:
 ```console
 cd ~
-cd ./Desktop/CloudStorage/PhD/Publishing/granular_model/repo/journal_figure
+cd ./Desktop/CloudStorage/Projects/Journal_figure/repo/journal_figure
 git add --all
 git diff --cached --name-only
 git commit -m "README update"
