@@ -1,0 +1,313 @@
+# Author: Marin Gilles
+# Contact: <mrngilles@gmail.com>
+# Github: Mrngilles
+#
+# matplotlib default stylesheet, with all values available from a stylesheet.
+
+# Backend selection
+backend:                'Agg'
+backend_fallback:       True
+backend.qt4:            'PyQt4'
+backend.qt5:            'PyQt5'
+webagg.port:            8988
+webagg.open_in_browser: True
+webagg.port_retries:    50
+nbagg.transparent:      True
+toolbar:                'toolbar2'
+datapath:               None
+interactive:            False
+timezone:               'UTC'
+
+# Verbosity Parameters
+verbose.level: silent
+verbose.fileo: sys.stdout
+
+# Line properties
+lines.linewidth:       1.0
+lines.linestyle:       -
+lines.color:           b
+lines.marker:          None
+lines.markeredgewidth: 0.5
+lines.markersize:      6
+lines.antialiased:     True
+lines.dash_joinstyle:  round
+lines.solid_joinstyle: round
+lines.dash_capstyle:   butt
+lines.solid_capstyle:  projecting
+
+## Patch properties
+patch.linewidth:   1.0
+patch.edgecolor:   k
+patch.facecolor:   b
+patch.antialiased: True
+
+## Font properties
+font.family:  sans-serif
+font.style:   normal
+font.variant: normal
+font.stretch: normal
+font.weight:  normal
+font.size:    12
+
+font.serif: Bitstream Vera Serif,
+            DejaVu Serif,
+            New Century Schoolbook,
+            Century Schoolbook L,
+            Utopia,
+            ITC Bookman,
+            Bookman,
+            Nimbus Roman No9 L,
+            Times New Roman,
+            Times,
+            Palatino,
+            Charter,
+            serif
+
+font.sans-serif: Bitstream Vera Sans,
+                 DejaVu Sans,
+                 Lucida Grande,
+                 Verdana,
+                 Geneva,
+                 Lucid,
+                 Arial,
+                 Helvetica,
+                 Avant Garde,
+                 sans-serif
+
+font.cursive: Apple Chancery,
+                Textile,
+                Zapf Chancery,
+                Sand,
+                Script MT,
+                Felipa,
+                cursive
+
+font.fantasy: Comic Sans MS,
+                Chicago,
+                Charcoal,
+                Impact
+                Western,
+                Humor Sans,
+                fantasy
+
+font.monospace: Bitstream Vera Sans Mono,
+                DejaVu Sans Mono,
+                Andale Mono,
+                Nimbus Mono L,
+                Courier New,
+                Courier,
+                Fixed,
+                Terminal,
+                monospace
+
+# Text properties
+text.color:          k
+text.usetex:         False
+text.latex.unicode:  False
+text.latex.preamble:
+text.latex.preview:  False
+text.dvipnghack:     None
+text.hinting:        True
+text.hinting_factor: 8
+text.antialiased:    True
+
+# Math text properties
+mathtext.cal:            cursive
+mathtext.rm:             serif
+mathtext.tt:             monospace
+mathtext.it:             serif:italic
+mathtext.bf:             serif:bold
+mathtext.sf:             sans-serif
+mathtext.fontset:        cm
+mathtext.default:        it
+mathtext.fallback_to_cm: True
+
+# Image properties
+image.aspect:        equal
+image.interpolation: bilinear
+image.cmap:          jet
+image.lut:           256
+image.origin:        upper
+image.resample:      False
+
+# Contour properties
+contour.negative_linestyle: dashed
+contour.corner_mask:        True
+
+# Axes properties
+axes.axisbelow:              False
+axes.hold:                   True
+axes.facecolor:              white
+axes.edgecolor:              black
+axes.linewidth:              1.0
+axes.titlesize:              large
+axes.titleweight:            normal
+axes.grid:                   False
+axes.grid.which:             major
+axes.labelsize:              medium
+#axes.labelpad:               5.0
+axes.labelweight:            normal
+axes.labelcolor:             black
+axes.formatter.limits:       -7, 7
+axes.formatter.use_locale:   False
+axes.formatter.use_mathtext: False
+axes.formatter.useoffset:    True
+axes.unicode_minus:          True
+axes.color_cycle:            blue, white, red, cyan, magenta, yellow, black
+axes.xmargin:                0
+axes.ymargin:                0
+
+polaraxes.grid: True
+axes3d.grid:    True
+
+## Legend properties
+legend.fancybox:      False
+legend.loc:           upper right # at some point, legend.loc should be changed to 'best'
+legend.isaxes:        True        # this option is internally ignored - it never served any useful purpose
+legend.numpoints:     2           # the number of points in the legend line
+legend.scatterpoints: 3           # the number of points in the legend line for scatter
+legend.fontsize:      large
+legend.markerscale:   1.0         # the relative size of legend markers vs. original
+legend.shadow:        False
+legend.frameon:       True        # whether or not to draw a frame around legend
+legend.framealpha:    None        # alpha value of the legend frame
+# the following dimensions are in fraction of the font size
+legend.borderpad:     0.4
+legend.labelspacing:  0.5         # the vertical space between the legend entries
+legend.handlelength:  2.0         # the length of the legend lines
+legend.handleheight:  0.7         # the length of the legend lines
+legend.handletextpad: 0.8         # the space between the legend line and legend text
+legend.borderaxespad: 0.5         # the border between the axes and legend edge
+legend.columnspacing: 2.0         # the border between the axes and legend edge
+legend.shadow:        False
+legend.facecolor:     None
+legend.edgecolor:     None
+
+## Tick properties
+xtick.major.size:  4
+xtick.minor.size:  2
+xtick.major.width: 0.5
+xtick.minor.width: 0.5
+xtick.major.pad:   4
+xtick.minor.pad:   4
+xtick.color:       black
+xtick.labelsize:   medium
+xtick.direction:   in
+
+ytick.major.size:  4
+ytick.minor.size:  2
+ytick.major.width: 0.5
+ytick.minor.width: 0.5
+ytick.major.pad:   4
+ytick.minor.pad:   4
+ytick.color:       black
+ytick.labelsize:   medium
+ytick.direction:   in
+
+## Grid properties
+grid.color:     black
+grid.linestyle: :
+grid.linewidth: 0.5
+grid.alpha:     1.0
+
+## Figure properties
+#figure.titlesize:        medium
+#figure.titleweight:      normal
+figure.figsize:          8.0, 6.0 # figure size in inches: width by height
+figure.dpi:              80
+figure.facecolor:        0.75
+figure.edgecolor:        white
+figure.frameon:          True
+figure.autolayout:       False
+figure.max_open_warning: 20
+figure.subplot.left:   0.125
+figure.subplot.right:  0.9
+figure.subplot.bottom: 0.1
+figure.subplot.top:    0.9
+figure.subplot.wspace: 0.2
+figure.subplot.hspace: 0.2
+
+## Figure saving properties
+savefig.dpi:          100
+savefig.facecolor:    white
+savefig.edgecolor:    white
+savefig.frameon:      True
+savefig.orientation:  protrait
+savefig.jpeg_quality: 95
+savefig.extension:    png  # what to add to extensionless filenames
+savefig.format:       png  # value checked by backend at runtime
+savefig.bbox:         None # options are tight, or 'standard'. 'standard' validates to None.
+savefig.pad_inches:   0.1
+savefig.directory:    ~    # default directory in savefig dialog box
+savefig.transparent:  False
+
+# Maintain shell focus for TkAgg
+tk.window_focus:  False
+tk.pythoninspect: False
+
+## PostScript save parameters
+ps.papersize:     letter # Set the papersize/type
+ps.useafm:        False
+ps.usedistiller:  False  # use ghostscript or xpdf to distill ps output
+ps.distiller.res: 6000
+ps.fonttype:      3
+
+## PDF Save parameters
+pdf.compression:    6     # compression level from 0 to 9; 0 to disable
+pdf.inheritcolor:   False # ignore any color-setting commands from the frontend
+pdf.use14corefonts: False # use only the 14 PDF core fonts embedded in every PDF viewing application
+pdf.fonttype:       3
+
+## PGF Save parameters
+pgf.debug:     False
+pgf.texsystem: xelatex # choose latex application for creating pdf files (xelatex/lualatex)
+pgf.rcfonts:   True    # use matplotlib rc settings for font configuration
+pgf.preamble:          # provide a custom preamble for the latex process
+
+## SVG Save parameters
+svg.image_inline:     True              # write raster image data directly into the svg file
+svg.image_noscale:    False             # suppress scaling of raster data embedded in SVG
+svg.embed_char_paths: True              # True to save all characters as paths in the SVG
+svg.fonttype:         path
+
+docstring.hardcopy: False               # set this when you want to generate hardcopy docstring
+plugins.directory:  .matplotlib_plugins # where plugin directory is locate
+
+path.simplify:           True
+path.simplify_threshold: 1.0 / 9.0
+path.snap:               True
+path.sketch:             None
+path.effects:
+agg.path.chunksize:      0
+
+## Key mappings
+keymap.fullscreen: f, ctrl+f
+keymap.home:       h, r, home
+keymap.back:       left, c, backspace
+keymap.forward:    right, v
+keymap.pan:        p
+keymap.zoom:       o
+keymap.save:       s, ctrl+s
+keymap.quit:       ctrl+w, cmd+w
+keymap.grid:       g
+keymap.yscale:     l
+keymap.xscale:     k, L
+keymap.all_axes:   a
+
+## Sample data
+examples.directory:
+
+## Animation settings
+animation.writer:        ffmpeg
+animation.codec:         mpeg4
+animation.bitrate:       -1
+animation.frame_format:  png ge format when frames are written to disk
+animation.ffmpeg_path:   ffmpeg   # Path to FFMPEG binary. If just binary name, subprocess uses $PATH.
+animation.ffmpeg_args:            # Additional arguments for ffmpeg movie writer (using pipes)
+animation.avconv_path:   avconv   # Path to AVConv binary. If just binary name, subprocess uses $PATH.
+animation.avconv_args:            # Additional arguments for avconv movie writer (using pipes)
+animation.mencoder_path: mencoder # Path to MENCODER binary. If just binary name, subprocess uses $PATH.
+animation.mencoder_args:          # Additional arguments for mencoder movie writer (using pipes)
+animation.convert_path:  convert  # Path to convert binary. If just binary name, subprocess uses $PATH
+animation.convert_args:           # Additional arguments for mencoder movie writer (using pipes)
+

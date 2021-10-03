@@ -1,0 +1,5 @@
+## Grid properties
+grid.color:         k
+grid.linestyle:     --
+grid.linewidth:     0.5    
+grid.alpha:         0.5

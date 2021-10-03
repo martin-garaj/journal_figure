@@ -52,3 +52,7 @@ conda deactivate
 ```
 
 
+Example plot:
+![pretty_style_v1](pretty_style_v1.png)
+
+

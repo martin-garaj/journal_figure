@@ -1,0 +1,8 @@
+## Font properties
+text.usetex:        False
+mathtext.fontset:   dejavuserif
+font.size:          12
+font.family:        serif
+font.serif:         DejaVu Serif
+font.sans-serif:    DejaVu Sans
+font.monospace:     DejaVu Sans Mono

@@ -10,16 +10,18 @@ Created on Sat Oct  2 17:28:20 2021
 #   ----------------------------------IMPORTS----------------------------------
 #   ---------------------------------------------------------------------------
 import matplotlib.pyplot as plt
-import matplotlib
+import matplotlib as mpl
 import numpy as np
 from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
+
+import os.path
 
 #%% ---------------------------------------------------------------------------
 #   ---------------------------------FUNCTIONS---------------------------------
 #   ---------------------------------------------------------------------------
 
 #%% prettify detail axis within a main axis
-def pretty_detail_axis(main_ax, main_limits, detail_ax, detail_limits, detail_pos, 
+def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_pos, 
                        connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}], 
                        line_setting = {'linestyle':'-', 'color':'black', 'linewidth':0.5, 'alpha':1.0}):
     """Set the position of the detail axis "detail_ax" within the main axis "main_ax",
@@ -151,26 +153,24 @@ def pretty_detail_axis(main_ax, main_limits, detail_ax, detail_limits, detail_po
 
 
 #%% general font settings
-def set_font(text_usetex=False, mathtext_fontset='dejavuserif',font_size=12, font_family='serif'):
+def set_style(apply_to='fonts', style='pretty_style_v1'):
     """
     Parameters
     ----------
-    text_usetex : bool, optional
-        Decide whether the text processor if TEX or LATEX. The default is False, thus LATEX is used by default.
-    mathtext_fontset : <string>, optional
-        Fontset for mathmode, since most of the labels are in a form $<string>$. The default is 'dejavuserif'.
-    font_size : <int>, optional
-        The default font sizse. The default is 12.
-    font_family : <string>, optional
-        The default font family 'sans' or 'serif'. The default is 'serif'.
-
+    apply_to: <string>, optional
+        Currently defined styles for 'figure', 'fonts', 'grid', 'ticks'
+    style : <string>, optional
+        Name of the style to be set.
     Returns
     -------
     None.
     """
-    plt.rcParams.update({'text.usetex': False, 'mathtext.fontset': 'dejavuserif'})
-    plt.rcParams.update({'font.size': 12})
-    plt.rcParams.update({'font.family': 'serif'})
+    _fuctionName = 'set_style'
+    path = './stylelib/'+apply_to+'/'+style+'.mplstyle'
+    if( os.path.isfile(path) ):
+        plt.style.use(path)
+    else:
+        raise RuntimeError(_fuctionName+': the file at the end of the path : '+path+', doesn''t exist.')
     
 
 #%% set ticks 
@@ -310,14 +310,11 @@ def set_ticks(figure, axes, minor_ticks=True, minor_labels=False, major_ticks=Tr
         # set labels
         axes.set_yticklabels(y_labels_latex, minor=True)
         
-        
-        
     # if(not latexify):
     #     ax.xaxis.set_major_formatter('{x:.0f}')          
     # # set looks of ticks
     # if(minor_ticks):
         
-    
     # # set the ticks
     # axes.set_xticklabels(x_labels_latex)
     # axes.set_yticklabels(y_labels_latex)
@@ -333,6 +330,35 @@ def prettify_major_ticks(axes, multiple=1.0, width=2.0, length=50.0, color='blac
     axes.yaxis.set_major_locator(MultipleLocator(multiple))
     # axes.tick_params(which='major', width=width, length=length, color=color, direction=direction)
     
+#%% 
+def set_figure_size(wdth, height, ax=None):
+    """
+    Set the figure size in centimeters. 
+
+    Parameters
+    ----------
+    w : <float>
+        Width of the figure.
+    h : <float>
+        Height of the figure.
+    ax : <handle axes>, optional
+        Handle of the axes belonging to the figure to be resized. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    if not ax: ax=plt.gca()
+    l = ax.figure.subplotpars.left
+    r = ax.figure.subplotpars.right
+    t = ax.figure.subplotpars.top
+    b = ax.figure.subplotpars.bottom
+    figw = float(wdth)/(r-l)
+    figh = float(height)/(t-b)
+    ax.figure.set_size_inches(figw/2.54, figh/2.54)    
+    
     
 #%% latexify
 def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
@@ -347,22 +373,77 @@ def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
     
     return latex_string
 
-#%% testing
+
+#%% ---------------------------------------------------------------------------
+#   ----------------------------------TESTING----------------------------------
+#   ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    
+    # close any previous figure
     plt.close('all')
+    
+    # apply specific style
+    set_style(apply_to='figure', style='pretty_style_v1')
+    set_style(apply_to='fonts',  style='pretty_style_v1')
+    set_style(apply_to='grid',   style='pretty_style_v1')
+    set_style(apply_to='ticks',  style='pretty_style_v1')
+ 
+    ## user input
+    limX = [0.5, 49.5]
+    limY = [-1.1, 1.1]
     figure = plt.figure(1)
     axes = figure.add_axes([0.10,0.10,0.80,0.80])
+    detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
     
-    axes.plot( np.sin(np.linspace(0, 2 * np.pi)), 'r')
+    colormap= 'viridis'
+    resolution = 5
     
-    set_ticks(  figure, 
-                axes,   
-                latexify=False,
-                major_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
-                minor_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
-                major_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'},
-                minor_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'}  )
-    prettify_minor_ticks(axes)
-    prettify_major_ticks(axes)
+    cmap = plt.get_cmap(colormap,resolution)
+    
+    # plot data
+    for idx in range(0, resolution):
+        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
+        detail_ax.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
+    
+    # set ticks
+    # set_ticks(  figure, 
+    #             axes,   
+    #             latexify=False,
+    #             major_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
+    #             minor_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
+    #             major_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'},
+    #             minor_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'}  )
+    # prettify_minor_ticks(axes)
+    # prettify_major_ticks(axes)
 
+    # enable and set minor ticks
+    axes.xaxis.set_major_locator(MultipleLocator(10))
+    axes.yaxis.set_major_locator(MultipleLocator(0.5))
+    axes.xaxis.set_minor_locator(MultipleLocator(1))
+    axes.yaxis.set_minor_locator(MultipleLocator(0.05))
+    axes.xaxis.set_ticks_position('both')
+    axes.yaxis.set_ticks_position('both')
+    
+    detail_ax.xaxis.set_major_locator(MultipleLocator(1))
+    detail_ax.yaxis.set_major_locator(MultipleLocator(0.1))
+    detail_ax.xaxis.set_minor_locator(MultipleLocator(1))
+    detail_ax.yaxis.set_minor_locator(MultipleLocator(0.05))
+    detail_ax.xaxis.set_ticks_position('both')
+    detail_ax.yaxis.set_ticks_position('both')
+    
+    axes.xaxis.set_major_formatter('${x:.0f}$')
+    axes.yaxis.set_major_formatter('${x:.1f}$')
+
+    # set detail
+    pretty_detail_axis(axes,
+                       detail_ax,
+                       main_limits=[limX, limY],
+                       detail_limits=[[22, 27],[-0.35, 0.35]],
+                       detail_pos=[[5, 20],[-0.9, -0.1]],
+                       connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}],
+                       line_setting = {'linestyle':'-', 'color':'black', 'linewidth':1.0, 'alpha':1.0} )
+    
+    
+    axes.grid('on')
+    
+    # set figure size
+    set_figure_size(20,12,axes)

@@ -1,0 +1,6 @@
+## Figure properties
+figure.figsize:          8.0, 6.0 # figure size in inches: width by height
+figure.dpi:              122
+figure.facecolor:        1.00
+figure.edgecolor:        white
+figure.frameon:          True
