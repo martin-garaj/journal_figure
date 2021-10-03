@@ -1,11 +1,11 @@
 **journal_figure** is a library for journal-level data plotting.
 The library comes with examples and pre-defined styles. 
 
-Example plot:
+Example figure:
 ![pretty_style_v1](pretty_style_v1.png)
 
 ---
-*Install* journal_figure from GitHub (system-wise from console):
+**Install** journal_figure from GitHub (system-wise from console):
 ```console
 python -m pip install git+https://github.com/martin-garaj/journal_figure.git@main
 ```
@@ -24,7 +24,7 @@ python -m pip uninstall journal_figure
 ```
 
 ---
-**How to:**:
+**How to get the Example figure:**
 
 ```python
 import journal_figure as jp
@@ -94,14 +94,14 @@ jf.set_figure_size(20,12,axes)
 
 # add legend
 label_order = [[ 1 , 2 , 3],
-                ['e', 0 , 4 ]]
+              ['e', 0 , 4 ]]
 jf.pretty_legend(axes, position=[1.03, 1.05], label_order=label_order, title='$Legend \; \Omega$')
 
 ```
 
 
 
-**Some personal notes**
+**Some personal notes:**
 
 ---
 Initial commit:
@@ -129,7 +129,7 @@ git push --set-upstream origin main -f
 ```
 
 ---
-Remined to set proper conda environment:
+Reminedr to set proper conda environment:
 ```console
 conda activate python3.9
 conda deactivate
