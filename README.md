@@ -5,19 +5,19 @@ Example plot:
 ![pretty_style_v1](pretty_style_v1.png)
 
 ---
-*Install* PV_lib from GitHub (system-wise from console):
+*Install* journal_figure from GitHub (system-wise from console):
 ```console
 python -m pip install git+https://github.com/martin-garaj/journal_figure.git@main
 ```
 
 ---
-**RE**install PV_lib from GitHub (system-wise from console):
+**RE**install journal_figure from GitHub (system-wise from console):
 ```console
 python -m pip install git+https://github.com/martin-garaj/journal_figure.git@main --force-reinstall
 ```
 
 ---
-**UN**install PV_lib from local (system-wise from console):
+**UN**install journal_figure from local (system-wise from console):
 
 ```console
 python -m pip uninstall journal_figure
@@ -48,11 +48,7 @@ colormap= 'viridis'
 resolution = 5
 
 # apply specific style
-jf.set_style(apply_to='figure', style='pretty_style_v1')
-jf.set_style(apply_to='fonts',  style='pretty_style_v1')
-jf.set_style(apply_to='grid',   style='pretty_style_v1')
-jf.set_style(apply_to='ticks',  style='pretty_style_v1')
-jf.set_style(apply_to='legend', style='pretty_style_v1')
+jf.set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])
 
 # get colormap function
 cmap = plt.get_cmap(colormap,resolution)
@@ -99,10 +95,13 @@ jf.set_figure_size(20,12,axes)
 # add legend
 label_order = [[ 1 , 2 , 3],
                 ['e', 0 , 4 ]]
-jf.pretty_legend(axes, position='best', label_order=label_order, title='$Legend \; \Omega$')
+jf.pretty_legend(axes, position=[1.03, 1.05], label_order=label_order, title='$Legend \; \Omega$')
 
 ```
 
+
+
+**Some personal notes**
 
 ---
 Initial commit:
@@ -113,7 +112,7 @@ git push -u origin main
 ```
 
 ---
-update PV_lib from local:
+update journal_figure from local:
 ```console
 cd ~
 cd ./Desktop/CloudStorage/Projects/Journal_figure/repo/journal_figure

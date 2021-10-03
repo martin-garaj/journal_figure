@@ -153,25 +153,32 @@ def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_po
 
 
 #%% general font settings
-def set_style(apply_to='fonts', style='pretty_style_v1'):
+def set_style(style='pretty_style_v1', apply_to='fonts'):
     """
+    Set pre-defined style to particular element.
+    
     Parameters
     ----------
-    apply_to: <string>, optional
-        Currently defined styles for 'figure', 'fonts', 'grid', 'ticks'
     style : <string>, optional
         Name of the style to be set.
+    apply_to: <list<string>>, optional
+        List of objects to apply the style to. Currently defined styles for 'figure', 'fonts', 'grid', 'ticks', 'legend'.
+        
     Returns
     -------
     None.
     """
     _fuctionName = 'set_style'
-    path = './stylelib/'+apply_to+'/'+style+'.mplstyle'
-    if( os.path.isfile(path) ):
-        plt.style.use(path)
-    else:
-        raise RuntimeError(_fuctionName+': the file at the end of the path : '+path+', doesn''t exist.')
     
+    if(isinstance(apply_to,list)):
+        for entry in apply_to:
+            path = './stylelib/'+entry+'/'+style+'.mplstyle'
+            if( os.path.isfile(path) ):
+                plt.style.use(path)
+            else:
+                raise RuntimeError(_fuctionName+': the file at the end of the path : '+path+', doesn''t exist.')
+    else:
+        raise ValueError(_fuctionName+': the "apply_to" parameter needs to be a <list> of <strings>.')
 
 #%% set ticks 
 def set_ticks(figure, axes, minor_ticks=True, minor_labels=False, major_ticks=True, major_labels=True, latexify=True, 
@@ -325,6 +332,7 @@ def prettify_minor_ticks(axes, multiple=1.0, width=1.0, length=3.0, color='black
     axes.yaxis.set_minor_locator(MultipleLocator(multiple))
     axes.tick_params(which='minor', width=width, length=length, color=color, direction=direction)
     
+#%%
 def prettify_major_ticks(axes, multiple=1.0, width=2.0, length=50.0, color='black', direction='out'):
     axes.xaxis.set_major_locator(MultipleLocator(multiple))
     axes.yaxis.set_major_locator(MultipleLocator(multiple))
@@ -373,7 +381,7 @@ def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
     
     return latex_string
 
-
+#%% pretty_legend
 def pretty_legend(axes, position='best', label_order='default', title=''):
     """
     Control the legend content and position. 
@@ -470,11 +478,7 @@ if __name__ == "__main__":
     resolution = 5
     
     # apply specific style
-    set_style(apply_to='figure', style='pretty_style_v1')
-    set_style(apply_to='fonts',  style='pretty_style_v1')
-    set_style(apply_to='grid',   style='pretty_style_v1')
-    set_style(apply_to='ticks',  style='pretty_style_v1')
-    set_style(apply_to='legend', style='pretty_style_v1')
+    set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])
     
     # get colormap function
     cmap = plt.get_cmap(colormap,resolution)
@@ -532,4 +536,4 @@ if __name__ == "__main__":
     # add legend
     label_order = [[ 1 , 2 , 3],
                     ['e', 0 , 4 ]]
-    pretty_legend(axes, position='best', label_order=label_order, title='$Legend \; \Omega$')
+    pretty_legend(axes, position=[1.03, 1.05], label_order=label_order, title='$Legend \; \Omega$')
