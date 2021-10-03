@@ -7,3 +7,9 @@ legend.shadow:        False
 legend.frameon:       True        # whether or not to draw a frame around legend
 legend.framealpha:    None        # alpha value of the legend frame
 legend.edgecolor:     black
+legend.borderpad:     0.25
+legend.columnspacing: 0.4
+legend.handletextpad: 0.1
+legend.handlelength:  3.0
+legend.handleheight:  1.0
+legend.labelspacing:  0.25

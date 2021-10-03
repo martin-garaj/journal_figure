@@ -481,7 +481,7 @@ if __name__ == "__main__":
     
     # plot data
     for idx in range(0, resolution):
-        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx), label = 'line '+str(idx+1))
+        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx), label = 'Line '+str(idx+1))
         detail_ax.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
     
     # set ticks
