@@ -1,0 +1,9 @@
+legend.fancybox:      False
+legend.numpoints:     2           # the number of points in the legend line
+legend.scatterpoints: 3           # the number of points in the legend line for scatter
+legend.fontsize:      medium
+legend.markerscale:   1.0         # the relative size of legend markers vs. original
+legend.shadow:        False
+legend.frameon:       True        # whether or not to draw a frame around legend
+legend.framealpha:    None        # alpha value of the legend frame
+legend.edgecolor:     black

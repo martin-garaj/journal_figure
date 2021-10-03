@@ -374,6 +374,80 @@ def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
     return latex_string
 
 
+def pretty_legend(axes, position='best', label_order='default', title=''):
+    """
+    Control the legend content and position. 
+
+    Parameters
+    ----------
+    axes : <handle axes>
+        Handle of the axes.
+    position : <string> / <list>/<tuple>/<numpy.ndarray>, optional
+    Location of the legend within the axes. \n
+        If <string> then following values are available: "best", "upper right", "upper left", "lower left", "lower right", "right", "center left", "center right", "lower center", "upper center", "center".\n
+        If <list>/<tuple>/<numpy.ndarray> then relative position of legends origin in form of [x0, y0], where 0.0<x0,y0<1.0, but values <0.0 and >1.0 are allowed as well. The default is 'best'.
+    label_order : <string> / <list<list>>/<2D numpy.ndarray>, optional
+        Order of the labels within the legend. \n
+        If <string> then following values are available: "default" and "reverse". \n
+        If <list<list>>/<2D numpy.ndarray> then the labels are ordered as follows: \n
+            label_order = [[ 1 , 2 , 3], \n
+                           ['e', 0 , 4 ]] \n
+        where the <int> are indexed position of labels and "e" is empty entry (e.g. when grouping of the labels into columns is required). \n
+        The default is 'default'.
+    title : <string>, optional
+        The title of the legend.
+    
+    Raises
+    ------
+    ValueError
+        Parameters "position" and "label_order" have multiple types, wrong type throws error.
+
+    Returns
+    -------
+    Handle of the legend <handle legend>.
+
+    """
+    # get handles and labels from the legend
+    handles, labels = axes.get_legend_handles_labels()
+    
+    if(label_order == 'reverse'):
+        handles_ordered = handles.copy()
+        labels_ordered  = labels.copy()
+        handles_ordered.reverse()
+        labels_ordered.reverse()
+    elif(label_order == 'default'):
+        handles_ordered = handles.copy()
+        labels_ordered  = labels.copy()
+    elif(type(label_order) == np.ndarray or type(label_order) == list):
+        # assure the array is np.array
+        label_order_np = np.array(label_order, dtype=object)
+        # allocate empty lists
+        handles_ordered = []
+        labels_ordered = []
+        # order the elements according to label_order_np
+        for x in np.transpose(label_order_np):
+            for y in x:
+                if(isinstance(y, int)):
+                    handles_ordered.append(handles[y])
+                    labels_ordered.append(labels[y])
+                else:
+                    empty_entry = mpl.lines.Line2D([1, 0], [0, 1], linewidth=None, linestyle=None, color=None, alpha=0.0, marker=None, markersize=None, markeredgewidth=None, markeredgecolor=None, markerfacecolor=None, markerfacecoloralt='none')
+                    handles_ordered.append(empty_entry)
+                    labels_ordered.append('')
+    else:
+        raise ValueError('The "label_order" parameter is incorrect. Check help(pretty_legend)')
+    
+    # show the legend
+    # axes.legend(handles, labels, ncol=2, bbox_to_anchor=(1.0, 1.0), loc=label_order_np.shape[1], borderaxespad=0.0)
+    
+    if(isinstance(position, str)):
+        legend = axes.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], loc=position, title=title)
+    elif(isinstance(position, list) or isinstance(position, np.ndarray) or isinstance(position, tuple)):
+        legend = axes.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], bbox_to_anchor=position, title=title)
+    else:
+        raise ValueError('The "position" parameter is incorrect. Only <string> with values: "best", "upper right", "upper left", "lower left", "lower right", "right", "center left", "center right", "lower center", "upper center", "center" \n or relative position <list>/<tuple>/<numpy.ndarray> with [x0, y0]')
+
+    return legend
 #%% ---------------------------------------------------------------------------
 #   ----------------------------------TESTING----------------------------------
 #   ---------------------------------------------------------------------------
@@ -381,27 +455,33 @@ if __name__ == "__main__":
     # close any previous figure
     plt.close('all')
     
+    # create figure
+    figure = plt.figure(1)
+    # add main axes
+    axes = figure.add_axes([0.10,0.10,0.80,0.80])
+    # add axis for detail
+    detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
+    ## axes limits
+    limX = [-0.5, 49.5]
+    limY = [-1.1, 1.1]
+    # pick colormap
+    colormap= 'viridis'
+    # number of data plotted
+    resolution = 5
+    
     # apply specific style
     set_style(apply_to='figure', style='pretty_style_v1')
     set_style(apply_to='fonts',  style='pretty_style_v1')
     set_style(apply_to='grid',   style='pretty_style_v1')
     set_style(apply_to='ticks',  style='pretty_style_v1')
- 
-    ## user input
-    limX = [0.5, 49.5]
-    limY = [-1.1, 1.1]
-    figure = plt.figure(1)
-    axes = figure.add_axes([0.10,0.10,0.80,0.80])
-    detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
+    set_style(apply_to='legend', style='pretty_style_v1')
     
-    colormap= 'viridis'
-    resolution = 5
-    
+    # get colormap function
     cmap = plt.get_cmap(colormap,resolution)
     
     # plot data
     for idx in range(0, resolution):
-        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
+        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx), label = 'line '+str(idx+1))
         detail_ax.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
     
     # set ticks
@@ -415,7 +495,7 @@ if __name__ == "__main__":
     # prettify_minor_ticks(axes)
     # prettify_major_ticks(axes)
 
-    # enable and set minor ticks
+    # set ticks position
     axes.xaxis.set_major_locator(MultipleLocator(10))
     axes.yaxis.set_major_locator(MultipleLocator(0.5))
     axes.xaxis.set_minor_locator(MultipleLocator(1))
@@ -430,6 +510,7 @@ if __name__ == "__main__":
     detail_ax.xaxis.set_ticks_position('both')
     detail_ax.yaxis.set_ticks_position('both')
     
+    # set ticks format
     axes.xaxis.set_major_formatter('${x:.0f}$')
     axes.yaxis.set_major_formatter('${x:.1f}$')
 
@@ -437,13 +518,18 @@ if __name__ == "__main__":
     pretty_detail_axis(axes,
                        detail_ax,
                        main_limits=[limX, limY],
-                       detail_limits=[[22, 27],[-0.35, 0.35]],
+                       detail_limits=[[21.5, 27.5],[-0.35, 0.35]],
                        detail_pos=[[5, 20],[-0.9, -0.1]],
                        connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}],
                        line_setting = {'linestyle':'-', 'color':'black', 'linewidth':1.0, 'alpha':1.0} )
     
-    
+    # enable grid
     axes.grid('on')
     
     # set figure size
     set_figure_size(20,12,axes)
+
+    # add legend
+    label_order = [[ 1 , 2 , 3],
+                    ['e', 0 , 4 ]]
+    pretty_legend(axes, position='best', label_order=label_order, title='$Legend \; \Omega$')
