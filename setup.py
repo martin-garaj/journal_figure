@@ -15,6 +15,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/martin-garaj/journal_figure",
     packages=setuptools.find_packages(),
+    package_dir={'journal_figure': 'journal_figure'},
+    package_data={'journal_figure': ['stylelib/*','stylelib/*/*','stylelib/*/*/*']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT",
