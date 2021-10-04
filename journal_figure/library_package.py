@@ -35,10 +35,10 @@ def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_po
     ----------
     main_ax: <axis handle>
         Handle of the main axis.
-    main_limits: [[x_min, x_max], [y_min, y_max]]
-        Limits of the main axis, such as required by xlim() abd ylim() functions.
     detail_ax: <axis handle>
         Handle of the detail axis.
+    main_limits: [[x_min, x_max], [y_min, y_max]]
+        Limits of the main axis, such as required by xlim() abd ylim() functions.
     detail_limits: [[x_min, x_max], [y_min, y_max]]
         Limits of the detail axis, such as required by xlim() abd ylim() functions.
     detail_pos: [[x_left, x_right], [y_bottom, y_top]]
