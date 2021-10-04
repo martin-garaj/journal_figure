@@ -20,6 +20,10 @@ import os.path
 #   ---------------------------------FUNCTIONS---------------------------------
 #   ---------------------------------------------------------------------------
 
+# copied from: https://stackoverflow.com/questions/4187300/how-do-i-use-a-relative-path-in-a-python-module-when-the-cwd-has-changed
+def package_path(*paths, package_directory=os.path.dirname(os.path.abspath(__file__))):
+    return os.path.join(package_directory, *paths)
+
 #%% prettify detail axis within a main axis
 def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_pos, 
                        connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}], 
@@ -172,7 +176,8 @@ def set_style(style='pretty_style_v1', apply_to='fonts'):
     
     if(isinstance(apply_to,list)):
         for entry in apply_to:
-            path = './stylelib/'+entry+'/'+style+'.mplstyle'
+            # path = './stylelib/'+entry+'/'+style+'.mplstyle'
+            path = package_path(apply_to, style+'.mplstyle')
             if( os.path.isfile(path) ):
                 plt.style.use(path)
             else:
