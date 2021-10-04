@@ -2,7 +2,7 @@
 The library comes with examples and pre-defined styles. 
 
 Example figure:
-![pretty_style_v1](pretty_style_v1.png)
+![pretty_style_v1](./graphics/pretty_style_v1.png)
 
 ---
 **Install** journal_figure from GitHub (system-wise from console):
