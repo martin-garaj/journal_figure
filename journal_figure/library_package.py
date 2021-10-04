@@ -177,7 +177,7 @@ def set_style(style='pretty_style_v1', apply_to='fonts'):
     if(isinstance(apply_to,list)):
         for entry in apply_to:
             # path = './stylelib/'+entry+'/'+style+'.mplstyle'
-            path = package_path(entry, style+'.mplstyle')
+            path = package_path('stylelib/'+entry, style+'.mplstyle')
             if( os.path.isfile(path) ):
                 plt.style.use(path)
             else:
