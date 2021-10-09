@@ -12,7 +12,7 @@ Created on Sat Oct  2 17:28:20 2021
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
-from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator, FixedLocator)
 
 import os.path
 
@@ -24,7 +24,37 @@ import os.path
 def package_path(*paths, package_directory=os.path.dirname(os.path.abspath(__file__))):
     return os.path.join(package_directory, *paths)
 
-#%% prettify detail axis within a main axis
+
+#%% general font settings
+def set_style(style='pretty_style_v1', apply_to='fonts'):
+    """
+    Set pre-defined style to particular element.
+    
+    Parameters
+    ----------
+    style : <string>, optional
+        Name of the style to be set.
+    apply_to: <list<string>>, optional
+        List of objects to apply the style to. Currently defined styles for 'figure', 'fonts', 'grid', 'ticks', 'legend'.
+        
+    Returns
+    -------
+    None.
+    """
+    _fuctionName = 'set_style'
+    
+    if(isinstance(apply_to,list)):
+        for entry in apply_to:
+            # path = './stylelib/'+entry+'/'+style+'.mplstyle'
+            path = package_path('stylelib/'+entry, style+'.mplstyle')
+            if( os.path.isfile(path) ):
+                plt.style.use(path)
+            else:
+                raise RuntimeError(_fuctionName+': the file at the end of the path : '+path+', doesn''t exist.')
+    else:
+        raise ValueError(_fuctionName+': the "apply_to" parameter needs to be a <list> of <strings>.')
+
+#%% detail_axes
 def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_pos, 
                        connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}], 
                        line_setting = {'linestyle':'-', 'color':'black', 'linewidth':0.5, 'alpha':1.0}):
@@ -136,6 +166,7 @@ def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_po
             connction_y1 = detail_pos_y0
         # plot the connector
         connector   = main_ax.plot([connction_x0, connction_x1], [connction_y0, connction_y1], 
+                                 clip_on=False,
                                  color=line_setting['color'], 
                                  alpha=line_setting['alpha'], 
                                  linestyle=line_setting['linestyle'], 
@@ -154,196 +185,8 @@ def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_po
         detail_ax.spines[spine].set_alpha(line_setting['alpha']) 
     
     return lines
-
-
-#%% general font settings
-def set_style(style='pretty_style_v1', apply_to='fonts'):
-    """
-    Set pre-defined style to particular element.
     
-    Parameters
-    ----------
-    style : <string>, optional
-        Name of the style to be set.
-    apply_to: <list<string>>, optional
-        List of objects to apply the style to. Currently defined styles for 'figure', 'fonts', 'grid', 'ticks', 'legend'.
-        
-    Returns
-    -------
-    None.
-    """
-    _fuctionName = 'set_style'
-    
-    if(isinstance(apply_to,list)):
-        for entry in apply_to:
-            # path = './stylelib/'+entry+'/'+style+'.mplstyle'
-            path = package_path('stylelib/'+entry, style+'.mplstyle')
-            if( os.path.isfile(path) ):
-                plt.style.use(path)
-            else:
-                raise RuntimeError(_fuctionName+': the file at the end of the path : '+path+', doesn''t exist.')
-    else:
-        raise ValueError(_fuctionName+': the "apply_to" parameter needs to be a <list> of <strings>.')
-
-#%% set ticks 
-def set_ticks(figure, axes, minor_ticks=True, minor_labels=False, major_ticks=True, major_labels=True, latexify=True, 
-              minor_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'center', 'va':'top'}, 
-              minor_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'center', 'va':'center'}, 
-              major_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'center', 'va':'top'}, 
-              major_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'center', 'va':'center'}):
-    """
-    Parameters
-    ----------
-    axes : <handle axes>
-        Handle of the axes.
-    minor_ticks : bool, optional
-        Add minor ticks. The default is True.
-    minor_labels : bool, optional
-        Add minor labels. The default is False.
-    major_ticks : bool, optional
-        Add major ticks. The default is True.
-    major_labels : bool, optional
-        Add major labels. The default is True.
-    minor_X_settings : <dict>, optional
-        'rotation' : rotation of the ticks in degrees. The default is 0.
-        'rotation_mode' : 'default' or 'anchor'. The default is 'anchor'.
-        'ha' : Horizontal alignment of ticks: 'left', 'center', 'right'. The default is 'center'.
-        'va': Vertical alignment of ticks: 'bottom', 'baseline', 'center', 'top'. The default is 'top'.
-        https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_text_rotation_mode.html
-    minor_Y_settings : <dict>, optional
-        'rotation' : rotation of the ticks in degrees. The default is 0.
-        'rotation_mode' : 'default' or 'anchor'. The default is 'anchor'.
-        'ha' : Horizontal alignment of ticks: 'left', 'center', 'right'. The default is 'center'.
-        'va': Vertical alignment of ticks: 'bottom', 'baseline', 'center', 'top'. The default is 'right'.
-        https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_text_rotation_mode.html
-    major_X_settings : <dict>, optional
-        'rotation' : rotation of the ticks in degrees. The default is 0.
-        'rotation_mode' : 'default' or 'anchor'. The default is 'anchor'.
-        'ha' : Horizontal alignment of ticks: 'left', 'center', 'right'. The default is 'center'.
-        'va': Vertical alignment of ticks: 'bottom', 'baseline', 'center', 'top'. The default is 'top'.
-        https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_text_rotation_mode.html
-    major_Y_settings : <dict>, optional
-        'rotation' : rotation of the ticks in degrees. The default is 0.
-        'rotation_mode' : 'default' or 'anchor'. The default is 'anchor'.
-        'ha' : Horizontal alignment of ticks: 'left', 'center', 'right'. The default is 'center'.
-        'va': Vertical alignment of ticks: 'bottom', 'baseline', 'center', 'top'. The default is 'right'.
-        https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_text_rotation_mode.html
-
-    Returns
-    -------
-    None.
-
-    """
-    # assure all elements in figure are available
-    figure.canvas.draw()
-    
-    # major x labels
-    x_labels_latex = []
-    if(major_labels):
-        x_labels = axes.get_xticklabels(minor=False)
-        for x_label in x_labels:
-            x_label.set_rotation(major_X_settings['rotation'])
-            x_label.set_horizontalalignment(major_X_settings['ha'])
-            x_label.set_verticalalignment(major_X_settings['va'])
-            x_label.set_rotation_mode(major_X_settings['rotation_mode'])
-            if(latexify):
-                x_labels_latex.append( _latexify(x_label.get_text()) )
-            else:
-                x_labels_latex.append( x_label.get_text() ) 
-        # set positions
-        x_positions = []
-        x_labels = axes.get_xticklabels(minor=False)
-        for x_label in x_labels:
-            x_positions.append( x_label.get_position()[0] )
-        axes.set_xticks( x_positions )
-        # set labels
-        axes.set_xticklabels(x_labels_latex, minor=False)
-    # minor x labels
-    x_labels_latex = []
-    if(minor_labels):
-        x_labels = axes.get_xticklabels(minor=True)
-        for x_label in x_labels:
-            x_label.set_rotation(minor_X_settings['rotation'])
-            x_label.set_horizontalalignment(minor_X_settings['ha'])
-            x_label.set_verticalalignment(minor_X_settings['va'])
-            x_label.set_rotation_mode(minor_X_settings['rotation_mode'])
-            if(latexify):
-                x_labels_latex.append( _latexify(x_label.get_text()) )
-            else:
-                x_labels_latex.append( x_label.get_text() )
-        # set positions
-        x_positions = []
-        x_labels = axes.get_xticklabels(minor=True)
-        for x_label in x_labels:
-            x_positions.append( x_label.get_position()[0] )
-        axes.set_xticks( x_positions )
-        # set labels
-        axes.set_xticklabels(x_labels_latex, minor=True)
-    # major y labels
-    y_labels_latex = []
-    if(major_labels):
-        y_labels = axes.get_yticklabels(minor=False)
-        for y_label in y_labels:
-            y_label.set_rotation(major_Y_settings['rotation'])
-            y_label.set_horizontalalignment(major_Y_settings['ha'])
-            y_label.set_verticalalignment(major_Y_settings['va'])
-            y_label.set_rotation_mode(major_Y_settings['rotation_mode'])
-            if(latexify):
-                y_labels_latex.append( _latexify(y_label.get_text()) )
-            else:
-                y_labels_latex.append( y_label.get_text() )
-        # set positions
-        y_positions = []
-        y_labels = axes.get_yticklabels(minor=False)
-        for y_label in y_labels:
-            y_positions.append( y_label.get_position()[1] )
-        axes.set_yticks( y_positions )
-        # set labels
-        axes.set_yticklabels(y_labels_latex, minor=False)
-    # minor y labels
-    y_labels_latex = []
-    if(minor_labels):
-        y_labels = axes.get_yticklabels(minor=True)
-        for y_label in y_labels:
-            y_label.set_rotation(minor_Y_settings['rotation'])
-            y_label.set_horizontalalignment(minor_Y_settings['ha'])
-            y_label.set_verticalalignment(minor_Y_settings['va'])
-            y_label.set_rotation_mode(minor_Y_settings['rotation_mode'])
-            if(latexify):
-                y_labels_latex.append( _latexify(y_label.get_text()) )
-            else:
-                y_labels_latex.append( y_label.get_text() )
-        # set positions
-        y_positions = []
-        y_labels = axes.get_yticklabels(minor=True)
-        for y_label in y_labels:
-            y_positions.append( y_label.get_position()[1] )
-        axes.set_yticks( y_positions )
-        # set labels
-        axes.set_yticklabels(y_labels_latex, minor=True)
-        
-    # if(not latexify):
-    #     ax.xaxis.set_major_formatter('{x:.0f}')          
-    # # set looks of ticks
-    # if(minor_ticks):
-        
-    # # set the ticks
-    # axes.set_xticklabels(x_labels_latex)
-    # axes.set_yticklabels(y_labels_latex)
-    
-#%% 
-def prettify_minor_ticks(axes, multiple=1.0, width=1.0, length=3.0, color='black', direction='in'):
-    axes.xaxis.set_minor_locator(MultipleLocator(multiple))
-    axes.yaxis.set_minor_locator(MultipleLocator(multiple))
-    axes.tick_params(which='minor', width=width, length=length, color=color, direction=direction)
-    
-#%%
-def prettify_major_ticks(axes, multiple=1.0, width=2.0, length=50.0, color='black', direction='out'):
-    axes.xaxis.set_major_locator(MultipleLocator(multiple))
-    axes.yaxis.set_major_locator(MultipleLocator(multiple))
-    # axes.tick_params(which='major', width=width, length=length, color=color, direction=direction)
-    
-#%% 
+#%% figure_size
 def set_figure_size(wdth, height, ax=None):
     """
     Set the figure size in centimeters. 
@@ -371,23 +214,9 @@ def set_figure_size(wdth, height, ax=None):
     figw = float(wdth)/(r-l)
     figh = float(height)/(t-b)
     ax.figure.set_size_inches(figw/2.54, figh/2.54)    
-    
-    
-#%% latexify
-def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
 
-    latex_string = '$'
-        
-    # prepend \ to any of the symbols '%', '$', '&'
-    for element in special_chars:
-        latex_string = string.replace(element, '\\'+element)
-    
-    latex_string = latex_string + '$'
-    
-    return latex_string
-
-#%% pretty_legend
-def pretty_legend(axes, position='best', label_order='default', title=''):
+#%% legend
+def pretty_legend(axes, label_source = [], position='best', label_order='default', title=''):
     """
     Control the legend content and position. 
 
@@ -421,7 +250,15 @@ def pretty_legend(axes, position='best', label_order='default', title=''):
 
     """
     # get handles and labels from the legend
-    handles, labels = axes.get_legend_handles_labels()
+    if( not label_source):
+        handles, labels = axes.get_legend_handles_labels()        
+    else:
+        handles = []
+        labels = []
+        for ax in label_source:
+            _handles, _labels = ax.get_legend_handles_labels()
+            handles.extend(_handles)
+            labels.extend(_labels)
     
     if(label_order == 'reverse'):
         handles_ordered = handles.copy()
@@ -456,89 +293,327 @@ def pretty_legend(axes, position='best', label_order='default', title=''):
     if(isinstance(position, str)):
         legend = axes.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], loc=position, title=title)
     elif(isinstance(position, list) or isinstance(position, np.ndarray) or isinstance(position, tuple)):
-        legend = axes.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], bbox_to_anchor=position, title=title)
+        # legend = axes.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], bbox_to_anchor=position, title=title)
+        # assure the current figure is the figure containing axis
+        plt.figure( axes.get_figure().number )
+        # add legend
+        legend = plt.legend(handles_ordered, labels_ordered, ncol=label_order_np.shape[1], loc='center', bbox_to_anchor=(position[0], position[1]), title=title, bbox_transform=plt.gcf().transFigure)
     else:
         raise ValueError('The "position" parameter is incorrect. Only <string> with values: "best", "upper right", "upper left", "lower left", "lower right", "right", "center left", "center right", "lower center", "upper center", "center" \n or relative position <list>/<tuple>/<numpy.ndarray> with [x0, y0]')
 
     return legend
+
+#%% colorbar_axes
+def add_colorbar(axes_colorbar, colormap, min_value, max_value, 
+                 style_ticks={'number_of_ticks':11, 'ticks_start': 0.0, 'ticks_end': 1.0, 'labels':[]}, 
+                 style_labels={'label_format':'{0:.3f}', 'label_align':'', 'rotation_angle':0.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':0.0},
+                 style_colorbar={'orientation': 'vertical', 'xlabel':'', 'ylabel':'', 'title':'', 'boundaries':[] } ):
+
+    norm = mpl.colors.Normalize(vmin=min_value,vmax=max_value)
+    sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
+    sm.set_array([])
+    
+    clb = plt.colorbar(sm,
+                        ticks = [] if style_ticks['number_of_ticks'] <= 0 else np.linspace( style_ticks['ticks_start'], 
+                                                                                              style_ticks['ticks_end'], 
+                                                                                              style_ticks['number_of_ticks']),
+                        boundaries = None if np.array(style_colorbar['boundaries']).size == 0 else style_colorbar['boundaries'], 
+                        ax=axes_colorbar, fraction=1.0, pad=0.0)
+    
+    # set colorbar style
+    clb.set_title  = style_colorbar['title']  
+    clb.set_xlabel = style_colorbar['xlabel']
+    clb.set_ylabel = style_colorbar['ylabel']
+    
+    # hide the orignal axis
+    axes_colorbar.set_axis_off()
+    
+    if( style_colorbar['orientation'] == 'vertical' ):
+        clb.ax.set_yticklabels(style_ticks['labels'])
+    elif( style_colorbar['orientation'] == 'horizontal' ):
+        clb.ax.set_xticklabels(style_ticks['labels'])
+    else:
+        raise ValueError('The only allowed values for "style_colorbar[\'orientation\']" are \'horizontal\' and \'vertical\'.')
+
+    # force to draw
+    axes.get_figure().canvas.draw()
+    
+    # loop through labels
+    if( style_colorbar['orientation'] == 'horizontal' ):
+        label_list = clb.ax.get_xticklabels(minor=False)
+    elif( style_colorbar['orientation'] == 'vertical'):
+        label_list = clb.ax.get_yticklabels(minor=False)
+        
+    for label_idx, label_object in enumerate(label_list):
+        # horizontal alignment
+        if('W' in style_labels['label_align'] or 'E' in style_labels['label_align']):
+            label_object.set_horizontalalignment( 'left' if 'W' in style_labels['label_align'] else 'right' )
+        else:
+            label_object.set_horizontalalignment( 'center' )
+        # vertical alignment
+        if('N' in style_labels['label_align'] or 'S' in style_labels['label_align']):
+            label_object.set_verticalalignment( 'top' if 'N' in style_labels['label_align'] else 'bottom' )
+        else:
+            label_object.set_verticalalignment( 'center' )
+            
+        # set rotation origin
+        label_object.set_rotation_mode(style_labels['rotation_origin'])
+        # rotate
+        label_object.set_rotation(style_labels['rotation_angle'])
+        
+        # adjust position of labels
+        label_object.set_position( (label_object.get_position()[0] + style_labels['padding_x'], label_object.get_position()[1] + style_labels['padding_y']) )
+
+        # print( 'colorbar label['+str(label_idx)+'] = '+  str(label_object.get_text().replace('−','-')  ) ) 
+
+        # set text
+        if( style_ticks['labels'] == None ):
+            # remove text
+            label_object.set_text( '' )
+        elif( not style_ticks['labels'] ):
+            # apply formatting to the text
+            if( any( x in style_labels['label_format'] for x in ['f', 'F', 'e', 'E', 'g', 'G'] ) ):
+                # convert text to float
+                label_object.set_text( style_labels['label_format'].format( float( label_object.get_text().replace('−','-') ) ) )
+            elif( any( x in style_labels['label_format'] for x in ['f'] ) ):
+                # convert text to integer
+                label_object.set_text( style_labels['label_format'].format( int( label_object.get_text()).replace('−','-') ) )
+            else:
+                # no conversion
+                label_object.set_text( style_labels['label_format'].format( label_object.get_text()) )
+        else:
+            label_object.set_text( style_labels['label_format'].format( style_ticks['labels'][label_idx] ) )
+
+    # force to draw
+    if( style_colorbar['orientation'] == 'horizontal' ):
+        clb.ax.set_xticklabels(label_list)
+    elif( style_colorbar['orientation'] == 'vertical' ):
+        clb.ax.set_yticklabels(label_list)
+
+
+#%% major_ticks
+def set_major_ticks(axes, periodicity, along_axes='x', labels=[], which_axes='SW', 
+                    style_labels={'label_format':'{0:.3f}', 'label_align':'', 'rotation_angle':0.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':0.0}):
+    
+    # sanity check
+    if( not any( x in along_axes for x in ['x', 'y'] ) ):
+        raise ValueError('The only allowed values for "along_axes" are \'x\' and \'y\'.')
+    
+    # force to draw
+    axes.get_figure().canvas.draw()
+    
+    # get axes limits
+    if(along_axes=='x'):
+        limits = axes.get_xlim()
+    elif(along_axes=='y'):
+        limits = axes.get_ylim()
+    
+    # set position
+    if(along_axes=='x'):
+        if('N' in which_axes or 'S' in which_axes):
+            axes.xaxis.set_ticks_position( 'top' if 'N' in which_axes else 'bottom' )
+        else:
+            axes.xaxis.set_ticks_position( 'bottom' )
+    elif(along_axes=='y'):
+        if('W' in which_axes or 'E' in which_axes):
+            axes.yaxis.set_ticks_position( 'left' if 'W' in which_axes else 'right' )
+        else:
+            axes.yaxis.set_ticks_position( 'left' )    
+    
+    
+    # set periodicity of the ticks
+    # EXPLANATION: the combination of "MultipleLocator" and "FixedLocator" is used 
+    # to prevent an error "FixedFormatter should only be used together with FixedLocator"
+    if(along_axes=='x'):
+        ticks = MultipleLocator(periodicity)
+        axes.xaxis.set_major_locator(FixedLocator( ticks.tick_values(limits[0], limits[1]) ))
+    elif(along_axes=='y'):
+        ticks = MultipleLocator(periodicity)
+        axes.yaxis.set_major_locator(FixedLocator( ticks.tick_values(limits[0], limits[1]) ))
+    
+    # force to draw
+    axes.get_figure().canvas.draw()
+
+    # loop through labels
+    if(along_axes=='x'):
+        label_list = axes.get_xticklabels(minor=False)
+    elif(along_axes=='y'):
+        label_list = axes.get_yticklabels(minor=False)
+        
+    for label_idx, label_object in enumerate(label_list):
+        # horizontal alignment
+        if('W' in style_labels['label_align'] or 'E' in style_labels['label_align']):
+            label_object.set_horizontalalignment( 'left' if 'W' in style_labels['label_align'] else 'right' )
+        else:
+            label_object.set_horizontalalignment( 'center' )
+        # vertical alignment
+        if('N' in style_labels['label_align'] or 'S' in style_labels['label_align']):
+            label_object.set_verticalalignment( 'top' if 'N' in style_labels['label_align'] else 'bottom' )
+        else:
+            label_object.set_verticalalignment( 'center' )
+            
+        # set rotation origin
+        label_object.set_rotation_mode(style_labels['rotation_origin'])
+        # rotate
+        label_object.set_rotation(style_labels['rotation_angle'])
+        
+        # adjust position of labels
+        label_object.set_position( (label_object.get_position()[0] + style_labels['padding_x'], label_object.get_position()[1] + style_labels['padding_y']) )
+
+        # print( 'label['+str(label_idx)+'] = '+  str(label_object.get_text().replace('−','-')  ) ) 
+
+        # set text
+        if( labels == None ):
+            # remove text
+            label_object.set_text( '' )
+        elif( not labels ):
+            # apply formatting to the text
+            if( any( x in style_labels['label_format'] for x in ['f', 'F', 'e', 'E', 'g', 'G'] ) ):
+                # convert text to float
+                label_object.set_text( style_labels['label_format'].format( float( label_object.get_text().replace('−','-') ) ) )
+            elif( any( x in style_labels['label_format'] for x in ['f'] ) ):
+                # convert text to integer
+                label_object.set_text( style_labels['label_format'].format( int( label_object.get_text()).replace('−','-') ) )
+            else:
+                # no conversion
+                label_object.set_text( style_labels['label_format'].format( label_object.get_text()) )
+        else:
+            label_object.set_text( style_labels['label_format'].format( labels[label_idx] ) )
+
+    # force to draw
+    if(along_axes=='x'):
+        axes.set_xticklabels(label_list)
+    elif(along_axes=='y'):
+        axes.set_yticklabels(label_list)
+
+
+
+#%%
+# #%% 
+# def prettify_minor_ticks(axes, multiple=1.0, width=1.0, length=3.0, color='black', direction='in'):
+#     axes.xaxis.set_minor_locator(MultipleLocator(multiple))
+#     axes.yaxis.set_minor_locator(MultipleLocator(multiple))
+#     axes.tick_params(which='minor', width=width, length=length, color=color, direction=direction)
+    
+# #%%
+# def prettify_major_ticks(axes, multiple=1.0, width=2.0, length=50.0, color='black', direction='out'):
+#     axes.xaxis.set_major_locator(MultipleLocator(multiple))
+#     axes.yaxis.set_major_locator(MultipleLocator(multiple))
+#     # axes.tick_params(which='major', width=width, length=length, color=color, direction=direction)
+
+# #%% latexify
+# def _latexify(string, special_chars=['%', '$', '&', '"', "'"]):
+
+#     latex_string = '$'
+        
+#     # prepend \ to any of the symbols '%', '$', '&'
+#     for element in special_chars:
+#         latex_string = string.replace(element, '\\'+element)
+    
+#     latex_string = latex_string + '$'
+    
+#     return latex_string
+
+#%% ---------------------------------------------------------------------------
+#   ----------------------------BACK COMPATIBILITY-----------------------------
+#   ---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 #%% ---------------------------------------------------------------------------
 #   ----------------------------------TESTING----------------------------------
 #   ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    # close any previous figure
-    plt.close('all')
     
-    # create figure
-    figure = plt.figure(1)
-    # add main axes
-    axes = figure.add_axes([0.10,0.10,0.80,0.80])
-    # add axis for detail
-    detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
-    ## axes limits
-    limX = [-0.5, 49.5]
-    limY = [-1.1, 1.1]
-    # pick colormap
-    colormap= 'viridis'
     # number of data plotted
-    resolution = 5
+    data_resolution = 6    
+    
+    # pick colormap
+    colormap= 'viridis'    
+    
+    # axes limits
+    limX = [-0.5, 49.5]
+    limY = [-1.1, 1.1]    
     
     # apply specific style
-    set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])
+    set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])    
+    
+    ### close any previous figure
+    plt.close('all')    
+    ### create figure
+    figure = plt.figure(1)
+    ### add axes
+    # main axes 1
+    axes = figure.add_axes([0.10,0.54,0.70,0.40])
+    axes.set_zorder(1)
+    axes.grid('on')
+    axes.set_xlim(limX)
+    axes.set_ylim(limY)
+    # main axes 2
+    axes2 = figure.add_axes([0.10,0.07,0.70,0.40])
+    axes2.set_zorder(-1)
+    axes2.grid('on')
+    axes2.set_xlim(limX)
+    axes2.set_ylim(limY)
+    # colorbar axes
+    axes_colorbar = figure.add_axes([0.85,0.10,0.1,0.80])
+    # axes for detail
+    detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
+    detail_ax.set_zorder(2)
     
     # get colormap function
-    cmap = plt.get_cmap(colormap,resolution)
+    cmap = plt.get_cmap(colormap)
     
     # plot data
-    for idx in range(0, resolution):
-        axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx), label = 'Line '+str(idx+1))
-        detail_ax.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
+    for idx in range(0, data_resolution):
+        axes.plot( ((idx+0.3)/data_resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1) ), label = 'Line '+str(idx+1))
+        detail_ax.plot( ((idx+0.3)/data_resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1) ) )
+        axes2.plot( ((idx+0.3)/data_resolution)*np.cos(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1)), label = 'Line '+str(idx+1+data_resolution), linestyle=':')     
     
-    # set ticks
-    # set_ticks(  figure, 
-    #             axes,   
-    #             latexify=False,
-    #             major_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
-    #             minor_X_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'left', 'va':'top'}, 
-    #             major_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'},
-    #             minor_Y_settings={'rotation': 0, 'rotation_mode':'anchor', 'ha':'right', 'va':'center'}  )
-    # prettify_minor_ticks(axes)
-    # prettify_major_ticks(axes)
-
-    # set ticks position
-    axes.xaxis.set_major_locator(MultipleLocator(10))
-    axes.yaxis.set_major_locator(MultipleLocator(0.5))
-    axes.xaxis.set_minor_locator(MultipleLocator(1))
-    axes.yaxis.set_minor_locator(MultipleLocator(0.05))
-    axes.xaxis.set_ticks_position('both')
-    axes.yaxis.set_ticks_position('both')
+    # colorbar
+    add_colorbar(axes_colorbar, cmap, 0.3, 1.3, 
+                 style_ticks={'number_of_ticks':6, 'ticks_start': 0.4, 'ticks_end': 1.2, 'labels':['a', 'b', 'c', 'd', r'$\bf{e}$', r'$\frac{f}{g}$']},
+                 style_labels={'label_format':'{0!s}', 'label_align':'W', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.3, 'padding_y':0.0},
+                 style_colorbar={'orientation': 'vertical', 'xlabel':'X', 'ylabel':'Y', 'title':'Title', 'boundaries':[]} )
     
-    detail_ax.xaxis.set_major_locator(MultipleLocator(1))
-    detail_ax.yaxis.set_major_locator(MultipleLocator(0.1))
-    detail_ax.xaxis.set_minor_locator(MultipleLocator(1))
-    detail_ax.yaxis.set_minor_locator(MultipleLocator(0.05))
-    detail_ax.xaxis.set_ticks_position('both')
-    detail_ax.yaxis.set_ticks_position('both')
-    
-    # set ticks format
-    axes.xaxis.set_major_formatter('${x:.0f}$')
-    axes.yaxis.set_major_formatter('${x:.1f}$')
-
     # set detail
     pretty_detail_axis(axes,
                        detail_ax,
                        main_limits=[limX, limY],
                        detail_limits=[[21.5, 27.5],[-0.35, 0.35]],
-                       detail_pos=[[5, 20],[-0.9, -0.1]],
-                       connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}],
+                       detail_pos=[[14, 29],[-2.3, -0.6]],
+                       connections=[{'connector_detail':'NW', 'connector_detail_ax':'NW'}, {'connector_detail':'NE', 'connector_detail_ax':'NE'}],
                        line_setting = {'linestyle':'-', 'color':'black', 'linewidth':1.0, 'alpha':1.0} )
     
-    # enable grid
-    axes.grid('on')
+    set_major_ticks(axes,      5, along_axes='x', labels=[], which_axes='NW', 
+                      style_labels={'label_format':'{0:.0f}', 'label_align':'SW', 'rotation_angle': 45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y': 0.01})
+    set_major_ticks(axes2,     5, along_axes='x', labels=[], which_axes='SW', 
+                      style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
+    set_major_ticks(detail_ax, 2, along_axes='x', labels=[], which_axes='SW', 
+                      style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
     
+    set_major_ticks(axes,     0.4, along_axes='y', labels=[], which_axes='SW', 
+                      style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
+    set_major_ticks(detail_ax, 0.2, along_axes='y', labels=[], which_axes='SW', 
+                      style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})  
+    set_major_ticks(axes2,    0.4, along_axes='y', labels=[], which_axes='SW', 
+                      style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
+
+    # add legend
+    label_order = [[ 0 ,  2  , 'e' ],
+                   [ 6  , 8  , 4 ],
+                   [ 1  , 3  ,10 ],
+                   [ 7 ,  9  , 'e' ]]
+    legend = pretty_legend(axes, label_source=[axes, axes2], position=[0.66, 0.91], label_order=label_order, title='$Legend \; \Omega$')
+
     # set figure size
     set_figure_size(20,12,axes)
 
-    # add legend
-    label_order = [[ 1 , 2 , 3],
-                    ['e', 0 , 4 ]]
-    pretty_legend(axes, position=[1.03, 1.05], label_order=label_order, title='$Legend \; \Omega$')
+    plt.savefig('../graphics/pretty_style.pdf', bbox_inches='tight', dpi=200)
+    plt.savefig('../graphics/pretty_style.png', bbox_inches='tight', dpi=200)

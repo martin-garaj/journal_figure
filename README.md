@@ -2,7 +2,7 @@
 The library comes with examples and pre-defined styles. 
 
 Example figure:
-![pretty_style_v1](./graphics/pretty_style_v1.png)
+![pretty_style](./graphics/pretty_style.png)
 
 ---
 **Install** journal_figure from GitHub (system-wise from console):
@@ -30,72 +30,89 @@ python -m pip uninstall journal_figure
 import journal_figure as jp
 # use help(jf.<function name>) when in doubt.
 
-# close any previous figure
-plt.close('all')
-
-# create figure
-figure = plt.figure(1)
-# add main axes
-axes = figure.add_axes([0.10,0.10,0.80,0.80])
-# add axis for detail
-detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
-## axes limits
-limX = [-0.5, 49.5]
-limY = [-1.1, 1.1]
-# pick colormap
-colormap= 'viridis'
 # number of data plotted
-resolution = 5
+data_resolution = 6    
+
+# pick colormap
+colormap= 'viridis'    
+
+# axes limits
+limX = [-0.5, 49.5]
+limY = [-1.1, 1.1]    
 
 # apply specific style
-jf.set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])
+set_style(style='pretty_style_v1', apply_to=['figure', 'fonts', 'grid', 'ticks', 'legend'])    
+
+### close any previous figure
+plt.close('all')    
+### create figure
+figure = plt.figure(1)
+### add axes
+# main axes 1
+axes = figure.add_axes([0.10,0.54,0.70,0.40])
+axes.set_zorder(1)
+axes.grid('on')
+axes.set_xlim(limX)
+axes.set_ylim(limY)
+# main axes 2
+axes2 = figure.add_axes([0.10,0.07,0.70,0.40])
+axes2.set_zorder(-1)
+axes2.grid('on')
+axes2.set_xlim(limX)
+axes2.set_ylim(limY)
+# colorbar axes
+axes_colorbar = figure.add_axes([0.85,0.10,0.1,0.80])
+# axes for detail
+detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
+detail_ax.set_zorder(2)
 
 # get colormap function
-cmap = plt.get_cmap(colormap,resolution)
+cmap = plt.get_cmap(colormap)
 
 # plot data
-for idx in range(0, resolution):
-    axes.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx), label = 'Line '+str(idx+1))
-    detail_ax.plot( ((idx+0.3)/resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx))
+for idx in range(0, data_resolution):
+    axes.plot( ((idx+0.3)/data_resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1) ), label = 'Line '+str(idx+1))
+    detail_ax.plot( ((idx+0.3)/data_resolution)*np.sin(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1) ) )
+    axes2.plot( ((idx+0.3)/data_resolution)*np.cos(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1)), label = 'Line '+str(idx+1+data_resolution), linestyle=':')     
 
-# set ticks position
-axes.xaxis.set_major_locator(MultipleLocator(10))
-axes.yaxis.set_major_locator(MultipleLocator(0.5))
-axes.xaxis.set_minor_locator(MultipleLocator(1))
-axes.yaxis.set_minor_locator(MultipleLocator(0.05))
-axes.xaxis.set_ticks_position('both')
-axes.yaxis.set_ticks_position('both')
-
-detail_ax.xaxis.set_major_locator(MultipleLocator(1))
-detail_ax.yaxis.set_major_locator(MultipleLocator(0.1))
-detail_ax.xaxis.set_minor_locator(MultipleLocator(1))
-detail_ax.yaxis.set_minor_locator(MultipleLocator(0.05))
-detail_ax.xaxis.set_ticks_position('both')
-detail_ax.yaxis.set_ticks_position('both')
-
-# set ticks format
-axes.xaxis.set_major_formatter('${x:.0f}$')
-axes.yaxis.set_major_formatter('${x:.1f}$')
+# colorbar
+add_colorbar(axes_colorbar, cmap, 0.3, 1.3, 
+             style_ticks={'number_of_ticks':6, 'ticks_start': 0.4, 'ticks_end': 1.2, 'labels':['a', 'b', 'c', 'd', r'$\bf{e}$', r'$\frac{f}{g}$']},
+             style_labels={'label_format':'{0!s}', 'label_align':'W', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.3, 'padding_y':0.0},
+             style_colorbar={'orientation': 'vertical', 'xlabel':'X', 'ylabel':'Y', 'title':'Title', 'boundaries':[]} )
 
 # set detail
-jf.pretty_detail_axis(axes,
+pretty_detail_axis(axes,
                    detail_ax,
                    main_limits=[limX, limY],
                    detail_limits=[[21.5, 27.5],[-0.35, 0.35]],
-                   detail_pos=[[5, 20],[-0.9, -0.1]],
-                   connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}],
+                   detail_pos=[[14, 29],[-2.3, -0.6]],
+                   connections=[{'connector_detail':'NW', 'connector_detail_ax':'NW'}, {'connector_detail':'NE', 'connector_detail_ax':'NE'}],
                    line_setting = {'linestyle':'-', 'color':'black', 'linewidth':1.0, 'alpha':1.0} )
 
-# enable grid
-axes.grid('on')
+set_major_ticks(axes,      5, along_axes='x', labels=[], which_axes='NW', 
+                  style_labels={'label_format':'{0:.0f}', 'label_align':'SW', 'rotation_angle': 45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y': 0.01})
+set_major_ticks(axes2,     5, along_axes='x', labels=[], which_axes='SW', 
+                  style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
+set_major_ticks(detail_ax, 2, along_axes='x', labels=[], which_axes='SW', 
+                  style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
 
-# set figure size
-jf.set_figure_size(20,12,axes)
+set_major_ticks(axes,     0.4, along_axes='y', labels=[], which_axes='SW', 
+                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
+set_major_ticks(detail_ax, 0.2, along_axes='y', labels=[], which_axes='SW', 
+                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})  
+set_major_ticks(axes2,    0.4, along_axes='y', labels=[], which_axes='SW', 
+                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
 
 # add legend
-label_order = [[ 1 , 2 , 3],
-              ['e', 0 , 4 ]]
-jf.pretty_legend(axes, position=[1.03, 1.05], label_order=label_order, title='$Legend \; \Omega$')
+label_order = [[ 0 ,  2  , 'e' ],
+               [ 6  , 8  , 4 ],
+               [ 1  , 3  ,10 ],
+               [ 7 ,  9  , 'e' ]]
+legend = pretty_legend(axes, label_source=[axes, axes2], position=[0.66, 0.91], label_order=label_order, title='$Legend \; \Omega$')
+
+# set figure size
+set_figure_size(20,12,axes)
 
 ```
 
