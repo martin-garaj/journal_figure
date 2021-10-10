@@ -831,5 +831,5 @@ if __name__ == "__main__":
     set_figure_size(figure, 20, 12, units='cm')
 
     # save the figure
-    plt.savefig('../graphics/pretty_style.pdf', bbox_inches='tight', dpi=600)
-    plt.savefig('../graphics/pretty_style.png', bbox_inches='tight', dpi=600)
+    plt.savefig('../graphics/example_figure.pdf', bbox_inches='tight', dpi=600)
+    plt.savefig('../graphics/example_figure.png', bbox_inches='tight', dpi=600)

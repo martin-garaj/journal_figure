@@ -65,6 +65,7 @@ axes_colorbar = figure.add_axes([0.85,0.10,0.1,0.80])
 # axes for detail
 detail_ax = figure.add_axes([0.40,0.40,0.20,0.20])
 detail_ax.set_zorder(2)
+detail_ax.grid('on', which='both')
 
 # get colormap function
 cmap = plt.get_cmap(colormap)
@@ -76,43 +77,95 @@ for idx in range(0, data_resolution):
     axes2.plot( ((idx+0.3)/data_resolution)*np.cos(np.linspace(0, 2 * np.pi)), color=cmap(idx/(data_resolution-1)), label = 'Line '+str(idx+1+data_resolution), linestyle=':')     
 
 # colorbar
-add_colorbar(axes_colorbar, cmap, 0.3, 1.3, 
-             style_ticks={'number_of_ticks':6, 'ticks_start': 0.4, 'ticks_end': 1.2, 'labels':['a', 'b', 'c', 'd', r'$\bf{e}$', r'$\frac{f}{g}$']},
-             style_labels={'label_format':'{0!s}', 'label_align':'W', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.3, 'padding_y':0.0},
-             style_colorbar={'orientation': 'vertical', 'xlabel':'X', 'ylabel':'Y', 'title':'Title', 'boundaries':[]} )
+jf.add_colorbar(axes_colorbar, # Handle of the axes dedicated to colorbar.
+             cmap,  # Colormap 
+             0.3, # Minimum of the values taking value within the colorbar.
+             1.3, # Maximum of the values taking value within the colorbar.
+             labels = ['a', 'b', 'c', 'd', r'$\bf{e}$', r'$\frac{f}{g}$'], # List of labels used to mark the ticks.
+             style_ticks={'number_of_ticks':6, 'ticks_start': 0.4, 'ticks_end': 1.2}, # Style of the ticks placed along the colorbar.
+             style_labels={'which_axis':'NE', 'label_format':'{0!s}', 'label_align':'W', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.3, 'padding_y':0.0}, # Styling of the labels.
+             style_colorbar={'orientation': 'vertical', 'xlabel':'X', 'ylabel':'Y', 'title':'Title', 'boundaries':[]} # Stylizing of the colorbar.
+             )
 
 # set detail
-pretty_detail_axis(axes,
-                   detail_ax,
-                   main_limits=[limX, limY],
-                   detail_limits=[[21.5, 27.5],[-0.35, 0.35]],
-                   detail_pos=[[14, 29],[-2.3, -0.6]],
-                   connections=[{'connector_detail':'NW', 'connector_detail_ax':'NW'}, {'connector_detail':'NE', 'connector_detail_ax':'NE'}],
-                   line_setting = {'linestyle':'-', 'color':'black', 'linewidth':1.0, 'alpha':1.0} )
+jf.pretty_detail_axis(axes, # Axes handle of the major axes with the data plots.
+                   detail_ax, # Axes handle of the axes holding the detailed plots.
+                   main_limits=[limX, limY], # Limits of the main axes.
+                   detail_limits=[[21.5, 27.5],[-0.35, 0.35]], # Limits of the axes holding the details.
+                   detail_pos=[[14, 29],[-2.3, -0.6]], # Position of the detail within the main axes.
+                   connections=[{'connector_detail':'NW', 'connector_detail_ax':'NW'}, # The first connector connecting corner of the detail marking the rectangle and the detail axes. 
+                                {'connector_detail':'NE', 'connector_detail_ax':'NE'}],# The second connector connecting corner of the detail marking the rectangle and the detail axes. 
+                   line_setting = {'linestyle':'dotted', 'color':'black', 'linewidth':1.0, 'alpha':1.0} # Styling of the lines (connectors and the rectangle).
+                   )
 
-set_major_ticks(axes,      5, along_axes='x', labels=[], which_axes='NW', 
-                  style_labels={'label_format':'{0:.0f}', 'label_align':'SW', 'rotation_angle': 45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y': 0.01})
-set_major_ticks(axes2,     5, along_axes='x', labels=[], which_axes='SW', 
-                  style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
-set_major_ticks(detail_ax, 2, along_axes='x', labels=[], which_axes='SW', 
-                  style_labels={'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01})
+# set the major ticks 
+jf.set_major_ticks(axes, # Axes handle of the major axes with the data plots.
+                5, # Periodicity of the ticks.
+                along_axis='x', # Ticks along x-axis.
+                labels=[], # List of custom labels. Empty list meas default labels are used.
+                style_labels={'which_axis':'N', 'label_format':'{0:.0f}', 'label_align':'SW', 'rotation_angle': 45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y': 0.01}, # Styling of the labels.
+                style_ticks ={'which_axis':'NS'} # Styling of the ticks.
+                )
+jf.set_major_ticks(axes2, # Axes handle of the major axes with the data plots.
+                5, # Periodicity of the ticks.
+                along_axis='x', # Ticks along x-axis.
+                labels=[], # List of custom labels. Empty list meas default labels are used.
+                style_labels={'which_axis':'S', 'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01}, # Styling of the labels.
+                style_ticks ={'which_axis':'NS'} # Styling of the ticks.
+                )
+jf.set_major_ticks(detail_ax, # Axes handle of the detail axes with.
+                2, # Periodicity of the ticks.
+                along_axis='x', # Ticks along x-axis.
+                labels=[], # List of custom labels. Empty list meas default labels are used.
+                style_labels={'which_axis':'S', 'label_format':'{0:.0f}', 'label_align':'NW', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':-0.01}, # Styling of the labels.
+                style_ticks ={'which_axis':'NS'} # Styling of the ticks.
+                )
 
-set_major_ticks(axes,     0.4, along_axes='y', labels=[], which_axes='SW', 
-                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
-set_major_ticks(detail_ax, 0.2, along_axes='y', labels=[], which_axes='SW', 
-                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})  
-set_major_ticks(axes2,    0.4, along_axes='y', labels=[], which_axes='SW', 
-                  style_labels={'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01})
+jf.set_major_ticks(axes,     
+                0.4, 
+                along_axis='y', 
+                labels=[],
+                style_labels={'which_axis':'W', 'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01},
+                style_ticks ={'which_axis':'WE'}
+                )
+jf.set_major_ticks(detail_ax, 
+                0.2, 
+                along_axis='y', 
+                labels=[],
+                style_labels={'which_axis':'W', 'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01},
+                style_ticks ={'which_axis':'WE'}
+                )  
+jf.set_major_ticks(axes2,    
+                0.4, 
+                along_axis='y', 
+                labels=[],
+                style_labels={'which_axis':'W', 'label_format':'{0:.1f}', 'label_align':'NE', 'rotation_angle':-45.0, 'rotation_origin':'anchor', 'padding_x':-0.01, 'padding_y':0.01},
+                style_ticks ={'which_axis':'WE'})
 
-# add legend
+# set minor ticks
+jf.set_minor_ticks(detail_ax, 
+                0.5, 
+                along_axis='x',
+                style_ticks ={'which_axis':'NS'}
+                )
+
+jf.set_minor_ticks(detail_ax, 0.05, along_axis='y',
+                style_ticks ={'which_axis':'WE'})
+
+# set the position of labels within the legend
 label_order = [[ 0 ,  2  , 'e' ],
                [ 6  , 8  , 4 ],
                [ 1  , 3  ,10 ],
                [ 7 ,  9  , 'e' ]]
-legend = pretty_legend(axes, label_source=[axes, axes2], position=[0.66, 0.91], label_order=label_order, title='$Legend \; \Omega$')
+# add the legend
+legend = jf.pretty_legend(axes, label_source=[axes, axes2], position=[0.66, 0.91], label_order=label_order, title='$Legend \; \Omega$')
 
-# set figure size
-set_figure_size(20,12,axes)
+# set the size of the figure
+jf.set_figure_size(figure, 20, 12, units='cm')
+
+# save the figure
+# plt.savefig('../graphics/example_figure.pdf', bbox_inches='tight', dpi=600)
+# plt.savefig('../graphics/example_figure.png', bbox_inches='tight', dpi=600)
 
 ```
 
