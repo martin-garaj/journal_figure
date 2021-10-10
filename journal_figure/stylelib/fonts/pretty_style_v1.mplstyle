@@ -6,3 +6,4 @@ font.family:        serif
 font.serif:         DejaVu Serif
 font.sans-serif:    DejaVu Sans
 font.monospace:     DejaVu Sans Mono
+pdf.fonttype:       42
