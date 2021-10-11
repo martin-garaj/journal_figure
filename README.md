@@ -188,7 +188,7 @@ cd ~
 cd ./Desktop/CloudStorage/Projects/Journal_figure/repo/journal_figure
 git add --all
 git diff --cached --name-only
-git commit -m "README update"
+git commit -m "First working version"
 git push -u origin main
 ```
 
