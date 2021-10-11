@@ -20,7 +20,7 @@ import os.path
 #   ---------------------------------------------------------------------------
 
 #%% 
-# copied from: https://stackoverflow.com/questions/4187300/how-do-i-use-a-relative-path-in-a-python-module-when-the-cwd-has-changed
+# adopted from: https://stackoverflow.com/questions/4187300/how-do-i-use-a-relative-path-in-a-python-module-when-the-cwd-has-changed
 def package_path(*paths, package_directory=os.path.dirname(os.path.abspath(__file__))):
     return os.path.join(package_directory, *paths)
 
@@ -35,7 +35,8 @@ def set_style(style='pretty_style_v1', apply_to='fonts'):
     style : <string>, optional
         Name of the style to be set.
     apply_to: <list<string>>, optional
-        List of objects to apply the style to. Currently defined styles for 'figure', 'fonts', 'grid', 'ticks', 'legend'.
+        List of objects to apply the style to. Currently defined styles for 
+        \'figure\', \'fonts\', \'grid\', \'ticks\', \'legend\'.
         
     Returns
     -------
@@ -59,8 +60,9 @@ def set_style(style='pretty_style_v1', apply_to='fonts'):
 def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_pos, 
                        connections=[{'connector_detail':'NE', 'connector_detail_ax':'NE'}, {'connector_detail':'SW', 'connector_detail_ax':'SW'}], 
                        line_setting = {'linestyle':'-', 'color':'black', 'linewidth':0.5, 'alpha':1.0}):
-    """Set the position of the detail axis "detail_ax" within the main axis "main_ax",
-    create the focussed area and draw the connecting lines among edges.
+    """Set the position of the detail axis "detail_ax" within 
+    the main axis "main_ax", create the focussed area and draw 
+    the connecting lines among edges.
 
     Parameters
     ----------
@@ -69,19 +71,24 @@ def pretty_detail_axis(main_ax, detail_ax, main_limits, detail_limits, detail_po
     detail_ax: <axis handle>
         Handle of the detail axis.
     main_limits: [[x_min, x_max], [y_min, y_max]]
-        Limits of the main axis, such as required by xlim() abd ylim() functions.
+        Limits of the main axis, as required by xlim() abd ylim() functions.
     detail_limits: [[x_min, x_max], [y_min, y_max]]
-        Limits of the detail axis, such as required by xlim() and ylim() functions.
+        Limits of the detail axis, as required by xlim() and ylim() functions.
     detail_pos: [[x_left, x_right], [y_bottom, y_top]]
         Position of the detail_ax within the main_ax defined by 2 points in 
         the same manner as limits.
     connections: <list(<dict>)>
-        <dict>: 'connector_detail_ax': 'NE'/'NW'/'SE'/'SW' is the connecting point on the detail axes.
-                'connector_detail': 'NE'/'NW'/'SE'/'SW' is the connecting point of the rectangle around the detail.
+        <dict>: 'connector_detail_ax': 'NE'/'NW'/'SE'/'SW' 
+                    is the connecting point on the detail axes.
+                'connector_detail': 'NE'/'NW'/'SE'/'SW' 
+                    is the connecting point of the rectangle around the detail.
     line_setting: <dict>,
-        'linestyle': linestyle property of the connectors. Default value \'-\', other valid values are available at: https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
+        'linestyle': linestyle property of the connectors. Default value \'-\', 
+            other valid values are available at: 
+            https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
         'color' : color of the connector lines. Default value is \'black\'.
-        'linewidth' : line width of the connector lines and the detail axes spine. Default value is 0.5.
+        'linewidth' : line width of the connector lines and 
+            the detail axes spine. Default value is 0.5.
         'alpha' : alpha channel of the 'color' property.
         
     Returns
@@ -207,7 +214,8 @@ def set_figure_size(figure, wdth, height, units='cm'):
     height : <float>
         Height of the figure.
     units : <str>, optional
-        Units of the figure size, either \'cm\' for centimeters or \'inch\' for inches. Default value is \'cm\'.
+        Units of the figure size, either \'cm\' for centimeters 
+        or \'inch\' for inches. Default value is \'cm\'.
         
     Returns
     -------
@@ -238,26 +246,34 @@ def pretty_legend(axes, label_source=[], position='best', label_order='default',
     axes : <handle axes>
         Handle of the axes.
     label_source : <list(<axes handle>)>
-        List of axes handles in case the legend is supposed to include entries from other axes. Default value is [], which means the entries from "axes" are included.
+        List of axes handles in case the legend is supposed to include entries 
+        from other axes. Default value is [], 
+        which means the entries from "axes" are included.
     position : <string> / <list>/<tuple>/<numpy.ndarray>, optional
         Location of the legend within the axes. \n
-        If <string> then following values are available: "best", "upper right", "upper left", "lower left", "lower right", "right", "center left", "center right", "lower center", "upper center", "center".\n
-        If <list>/<tuple>/<numpy.ndarray> then relative position of legends origin in form of [x0, y0], where 0.0<x0,y0<1.0, but values <0.0 and >1.0 are allowed as well. The default is 'best'.
+        If <string> then following values are available: "best", "upper right", 
+        "upper left", "lower left", "lower right", "right", "center left", 
+        "center right", "lower center", "upper center", "center".\n
+        If <list>/<tuple>/<numpy.ndarray> then relative position of 
+        the legends origin in form of [x0, y0], where 0.0<x0,y0<1.0, 
+        but values <0.0 and >1.0 are allowed as well. The default is 'best'.
     label_order : <string> / <list<list>>/<2D numpy.ndarray>, optional
         Order of the labels within the legend. \n
-        If <string> then following values are available: "default" and "reverse". \n
-        If <list<list>>/<2D numpy.ndarray> then the labels are ordered as follows: \n
+        If <string> then these values are available: "default" and "reverse".
+        If <list<list>>/<2D numpy.ndarray> then the labels are ordered as:
             label_order = [[ 1 , 2 , 3], \n
                            ['e', 0 , 4 ]] \n
-        where the <int> are indexed positions of the labels and \'e\' is an empty entry (e.g. when grouping of the labels into columns is required). \n
-        The default is 'default'.
+        where the <int> are indexed positions of the labels and \'e\' is an 
+        empty entry (e.g. when a gap is among labels is required).
+        Default value is \'default\'.
     title : <string>, optional
         The title of the legend.
     
     Raises
     ------
     ValueError
-        Parameters "position" and "label_order" have multiple types, wrong type throws error.
+        Parameters "position" and "label_order" have multiple types, 
+        wrong type throws error.
 
     Returns
     -------
@@ -322,48 +338,74 @@ def add_colorbar(axes_colorbar, colormap, min_value, max_value, labels=[],
                  style_ticks={'number_of_ticks':11, 'ticks_start': 0.0, 'ticks_end': 1.0}, 
                  style_colorbar={'orientation': 'vertical', 'xlabel':'', 'ylabel':'', 'title':'', 'boundaries':[] } ):
     """
-    Setup a colorbar within a dedicated axes reserved within a figure to hold colorbar only. 
-    All details regarding the colorbar are set within this function. The dedicated axes
-    is hidden at the end.
+    Setup a colorbar within a dedicated axes reserved within a figure 
+    to hold colorbar only. All details regarding the colorbar are set within 
+    this function. The dedicated axes is hidden at the end.
 
     Parameters
     ----------
     axes_colorbar : <axes handle>
-        Handle of an axes dedicated to colorbar only. An axes for colorbar can be added as follows:
-            axes_colorbar = figure.add_axes([0.85,0.10,0.1,0.80])
-            where 0.1 is width and 0.80 is the height of the dedicated axes. The colorbar has its own width, 
-            but the height should be the same, thus 0.80.
+        Handle of an axes dedicated to colorbar only. 
+            An axes for colorbar can be added as follows:
+                axes_colorbar = figure.add_axes([0.85,0.10,0.1,0.80]),
+            where 0.1 is width and 0.80 is the height of the dedicated axes. 
+            The colorbar has its own width, but the height should be the same, 
+            thus 0.80.
     colormap : <colors.listedColormap>
-        Colormap as defined by matplotlib. An appropriate colorbar can be defined as follows:
+        Colormap as defined by matplotlib. 
+        An appropriate colorbar can be defined as follows:
             cmap = plt.get_cmap('viridis')
     min_value : <float>
-        Minimum value of the plotted values. Required for propper scaling of the colorbar. If not scaled properly, the ticks/labels are not placed correctly.
+        Minimum value of the plotted values. Required for propper scaling of 
+        the colorbar. If not scaled properly, the ticks/labels are not placed 
+        correctly.
     max_value : <float>
-        Maximum value of the plotted values. Required for propper scaling of the colorbar. If not scaled properly, the ticks/labels are not placed correctly.
+        Maximum value of the plotted values. Required for propper scaling of 
+        the colorbar. If not scaled properly, the ticks/labels are not placed 
+        correctly.
     labels : <list(<str>)>
-        Labels of the colorbar ticks. Default value is [] (empty list), which numbers the ticks automatically.
+        Labels of the colorbar ticks. Default value is [] 
+        (empty list), which numbers the ticks automatically.
         Value \'None\' suppreses labels.
     style_labels : <dict>, optional
         Dictionary defining the style of the labels.
-            'which_axes' : placement of the labels according to \'NSWE\' directional system. Default value is \'NE\' which stands for labels along the bottom \'top\' and \'right\' axis.
-            'label_format' : format of the labels. Default value is \'{0:.3f}\', for more information visit https://docs.python.org/3/library/stdtypes.html#str.format .
-            'label_align' : Vertical and horizontal alignment using \'NSWE\' directional system. Default value is \'''\', which means the aligned according to it's \'center\'.
-            'rotation_angle' : Rotation of the labels in degrees. Default value is 0.0.
-            'rotation_origin' : Origin of the rotation of the label. Default value is \'anchor\'. Other valid value is \'default\'.
-            'padding_x' : Adjustment in the x-direction (works only when colorbar orientation is \'vertical\'). Default value is 0.0.
-            'padding_y' : Adjustment in the x-direction (works only when colorbar orientation is \'horizontal\'). Default value is 0.0.   
+            'which_axes' : placement of the labels according to \'NSWE\' 
+                directional system. Default value is \'NE\' which stands for 
+                labels along the bottom \'top\' and \'right\' axis.
+            'label_format' : format of the labels. 
+                Default value is \'{0:.3f}\', for more information visit 
+                https://docs.python.org/3/library/stdtypes.html#str.format .
+            'label_align' : Vertical and horizontal alignment using \'NSWE\' 
+                directional system. Default value is \'''\', 
+                which means the aligned according to it's \'center\'.
+            'rotation_angle' : Rotation of the labels in degrees. 
+                Default value is 0.0.
+            'rotation_origin' : Origin of the rotation of the label. 
+                Default value is \'anchor\'. Other valid value is \'default\'.
+            'padding_x' : Adjustment in the x-direction (works only when 
+                colorbar orientation is \'vertical\'). Default value is 0.0.
+            'padding_y' : Adjustment in the x-direction (works only when 
+                colorbar orientation is \'horizontal\'). Default value is 0.0.   
     style_ticks : <dict>, optional
         Dictionary defining the style of the ticks on the colorbar.
-            'number_of_ticks' : number of ticks (thus labels) on the colorbar. Default value is 11.
-            'ticks_start' : Position of the first tick on normalized colorbar. Default value is 0.0.
-            'ticks_end' : Position of the last tick on normalized colorbar. Default value is 1.0.
+            'number_of_ticks' : number of ticks (thus labels) on the colorbar. 
+                Default value is 11.
+            'ticks_start' : Position of the first tick on normalized colorbar. 
+                Default value is 0.0.
+            'ticks_end' : Position of the last tick on normalized colorbar. 
+                Default value is 1.0.
     style_colorbar : <dict>, optional
         Dictionary defining the style of the colorbar.
-            'orientation' : Orientation of the colorbar. Default value is \'vertical\'. Other valid value is \'horizontal\'.
+            'orientation' : Orientation of the colorbar. 
+                Default value is \'vertical\'. 
+                Other valid value is \'horizontal\'.
             'xlabel' : X label of the colorbar. Default value is \'''\'.
             'ylabel' : Y label of the colorbar. Default value is \'''\'.
             'title' : Title of the colorbar. Default value is \'''\'.
-            'boundaries' : The colorbar is continuous by default. If the colorbar is to be split into regions, a set of boundaries <list(<float>)> can be provided. Default value is [].
+            'boundaries' : The colorbar is continuous by default. 
+                If the colorbar is to be split into regions, 
+                a set of boundaries <list(<float>)> can be provided. 
+                Default value is [].
 
     Raises
     ------
@@ -476,30 +518,47 @@ def set_major_ticks(axes, periodicity, along_axis, labels=[],
                     style_labels={'which_axis':'SW', 'label_format':'{0:.3f}', 'label_align':'', 'rotation_angle':0.0, 'rotation_origin':'anchor', 'padding_x':0.0, 'padding_y':0.0},
                     style_ticks ={'which_axes':'NSWE'}):
     """
-    Function providing complete control over the positioning and labeling the major ticks of the axes.
+    Function providing complete control over the positioning 
+    and labeling the major ticks of the axes.
     
     Parameters
     ----------
     axes : <axes handle>
         Handle of the axes.
     periodicity : <float>
-        Periodicity of the ticks. For instance \'periodicity = 10\' draws a tick on ... -20, -10, 0, 10, 20, ... places along the axis.
+        Periodicity of the ticks. For instance \'periodicity = 10\' draws 
+        a tick on ... -20, -10, 0, 10, 20, ... places along the axis.
     along_axes : <char>, optional
-        Pick axis along which the ticks are being controlled. Valid value are \'x\' and \'y\'.
+        Pick axis along which the ticks are being controlled. 
+        Valid value is \'x\' and \'y\'.
     labels : <list(<str>)>, optional
         List of labels printed along the axis. The default is [].
     style_labels : <dict>, optional
         Dictionary defining the style of the labels.
-            'which_axes' : placement of the labels according to \'NSWE\' directional system. Default value is \'SW\' which stands for labels along the bottom \'bottom\' and \'left\' axis.
-            'label_format' : format of the labels. Default value is \'{0:.3f}\', for more information visit https://docs.python.org/3/library/stdtypes.html#str.format .
-            'label_align' : Vertical and horizontal alignment using \'NSWE\' directional system. Default value is \'''\', which means the aligned according to it's \'center\'.
-            'rotation_angle' : Rotation of the labels in degrees. Default value is 0.0.
-            'rotation_origin' : Origin of the rotation of the label. Default value is \'anchor\'. Other valid value is \'default\'.
-            'padding_x' : Adjustment in the x-direction (works only when colorbar orientation is \'vertical\'). Default value is 0.0.
-            'padding_y' : Adjustment in the x-direction (works only when colorbar orientation is \'horizontal\'). Default value is 0.0.      
+            'which_axes' : placement of the labels according to \'NSWE\' 
+                directional system. Default value is \'SW\' 
+                which stands for labels along the bottom \'bottom\' 
+                and \'left\' axis.
+            'label_format' : format of the labels. 
+                Default value is \'{0:.3f}\', for more information visit 
+                https://docs.python.org/3/library/stdtypes.html#str.format .
+            'label_align' : Vertical and horizontal alignment using \'NSWE\' 
+                directional system. Default value is \'''\', 
+                which means the aligned according to it's \'center\'.
+            'rotation_angle' : Rotation of the labels in degrees. 
+                Default value is 0.0.
+            'rotation_origin' : Origin of the rotation of the label. 
+                Default value is \'anchor\'. Other valid value is \'default\'.
+            'padding_x' : Adjustment in the x-direction (works only when 
+                "along_axis=\'y\'". Default value is 0.0.
+            'padding_y' : Adjustment in the x-direction (works only when 
+                "along_axis=\'x\'". Default value is 0.0.     
     style_ticks : <dict>, optional
         Dictionary defining the style of the ticks on the colorbar.
-            'which_axis' : placement of the labels according to \'NSWE\' directional system. Default value is \'NSWE\', which make the ticks appear on every axis (\'top\',\'bottom\', \'left\' and \'right\').
+            'which_axis' : placement of the labels according to \'NSWE\' 
+            directional system. Default value is \'NSWE\', 
+            which make the ticks appear on every axis (\'top\',\'bottom\', 
+                                                       \'left\' and \'right\').
 
     Raises
     ------
@@ -602,19 +661,25 @@ def set_major_ticks(axes, periodicity, along_axis, labels=[],
 def set_minor_ticks(axes, periodicity, along_axis,
                     style_ticks ={'which_axis':'NSWE'}):
     """
-    Function providing complete control over the positioning of the minor ticks of the axes.
+    Function providing complete control over the positioning of \n
+    the minor ticks of the axes.
     
     Parameters
     ----------
     axes : <axes handle>
         Handle of the axes.
     periodicity : <float>
-        Periodicity of the ticks. For instance \'periodicity = 10\' draws a tick on ... -20, -10, 0, 10, 20, ... places along the axis.
+        Periodicity of the ticks. For instance \'periodicity = 10\'
+        draws a tick on ... -20, -10, 0, 10, 20, ... places along the axis.
     along_axes : <char>, optional
-        Pick axis along which the ticks are being controlled. Valid value are \'x\' and \'y\'.
+        Pick axis along which the ticks are being controlled.
+        Valid value are \'x\' and \'y\'.
     style_ticks : <dict>, optional
         Dictionary defining the style of the ticks on the colorbar.
-            'which_axis' : placement of the labels according to \'NSWE\' directional system. Default value is \'NSWE\', which make the ticks appear on every axis (\'top\',\'bottom\', \'left\' and \'right\').
+            'which_axis' : placement of the labels according to \'NSWE\'
+                directional system. Default value is \'NSWE\', 
+                which make the ticks appear on every axis (\'top\',\'bottom\',
+                                                       \'left\' and \'right\').
 
     Raises
     ------
